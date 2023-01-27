@@ -23,23 +23,20 @@ class Board extends React.Component {
   }
 
   render() {
+    let boardSquares = [];
+    for(let i = 0; i < 3; i++){
+      let tempRow = [];
+      for(let j = 0; j < 3; j++){
+        tempRow.push(<span key={((i * 3) + j)}>{this.renderSquare((i * 3) + j)}</span>);
+      }
+      boardSquares.push(
+        <div className="board-row" key={i}>{tempRow}</div>
+      )
+    }
+
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {boardSquares}
       </div>
     );
   }
@@ -55,7 +52,7 @@ class Game extends React.Component {
           location: "",
         },
       ],
-      stepNumber: 0,
+      stepNumber: 0, //Current selected Step
       xIsNext: true,
     };
   }
@@ -138,9 +135,15 @@ class Game extends React.Component {
     const moves = history.map((step, move) => {
       const desc = move ? "Go to move #" + move : "Go to game start";
       const moveLoc = move ? step.location : "";
+
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc} {moveLoc}</button>
+          <button
+            onClick={() => this.jumpTo(move)}
+            className={this.state.stepNumber === move ? "bolded-text" : ""}
+          >
+            {desc} {moveLoc}
+          </button>
         </li>
       );
     });
