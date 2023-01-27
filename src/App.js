@@ -52,6 +52,7 @@ class Game extends React.Component {
       history: [
         {
           squares: Array(9).fill(null),
+          location: "",
         },
       ],
       stepNumber: 0,
@@ -63,8 +64,42 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
+
     if (calculateWinner(squares) || squares[i]) {
       return;
+    }
+
+    let tempLocation = "";
+    switch (i) {
+      case 0:
+        tempLocation = "(1, 3)";
+        break;
+      case 1:
+        tempLocation = "(2, 3)";
+        break;
+      case 2:
+        tempLocation = "(3, 3)";
+        break;
+      case 3:
+        tempLocation = "(1, 2)";
+        break;
+      case 4:
+        tempLocation = "(2, 2)";
+        break;
+      case 5:
+        tempLocation = "(3, 2)";
+        break;
+      case 6:
+        tempLocation = "(1, 1)";
+        break;
+      case 7:
+        tempLocation = "(1, 2)";
+        break;
+      case 8:
+        tempLocation = "(1, 3)";
+        break;
+      default:
+        break;
     }
 
     squares[i] = this.state.xIsNext ? "X" : "O";
@@ -73,6 +108,7 @@ class Game extends React.Component {
         /* Here, basically adding to the end of history (history += {squares: squares}) */
         {
           squares: squares,
+          location: tempLocation,
         },
       ]),
       stepNumber: history.length,
@@ -101,9 +137,10 @@ class Game extends React.Component {
 
     const moves = history.map((step, move) => {
       const desc = move ? "Go to move #" + move : "Go to game start";
+      const moveLoc = move ? step.location : "";
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={() => this.jumpTo(move)}>{desc} {moveLoc}</button>
         </li>
       );
     });
